@@ -3,7 +3,7 @@
 entity documento{
     id <<PK>>
     numero
-    tipo // 1- CPF, 2- RG, 4- CNPJ, 5- CNH
+    tipo
     dt_emissao
     dt_validade
 }
@@ -36,6 +36,7 @@ entity pessoa_juridica {
 }
 
 entity motorista {
+    id <<PK>>
     id_pessoa_fisica <<FK>>
     id_pessoa <<FK>>
 }
@@ -74,6 +75,7 @@ entity filial {
 }
 
 entity funcionario {
+    id <<PK>>
     id_pessoa_fisica <<FK>>
     matricula
     data_admissao
@@ -94,11 +96,15 @@ entity filial_documento {
 
 entity seguro {
     id <<PK>>
-    id_filial <<FK>>
-    id_carro <<FK>>
+    descricao
     valor
     dt_inicio
     dt_fim
+}
+
+entity carro_seguro {
+    id_carro <<FK>>,
+    id_seguro <<FK>>
 }
 
 pessoa -- pessoa_documento

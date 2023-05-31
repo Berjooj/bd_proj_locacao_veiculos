@@ -1,101 +1,112 @@
 CREATE TABLE documento (
-    id INT,
-    numero VARCHAR(255),
-    tipo VARCHAR(255),
-    dt_emissao DATE,
-    dt_validade DATE
+    id BIGINT NOT NULL UNIQUE,
+    numero VARCHAR(255) NOT NULL,
+    tipo INT NOT NULL,
+    dt_emissao TIMESTAMP NOT NULL,
+    dt_validade TIMESTAMP
 );
 
+COMMENT ON COLUMN documento.tipo IS '1- RG, 2- CNH, 3- CPF, 4- CNPJ';
+
 CREATE TABLE pessoa (
-    id INT,
-    telefone VARCHAR(255),
-    endereco VARCHAR(255),
-    cidade VARCHAR(255),
-    email VARCHAR(255)
+    id BIGINT NOT NULL UNIQUE,
+    telefone VARCHAR(255) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    cidade VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE pessoa_documento (
-    id_pessoa INT,
-    id_documento INT
+    id_pessoa BIGINT NOT NULL,
+    id_documento BIGINT NOT NULL
 );
 
 CREATE TABLE pessoa_fisica (
-    id_pessoa INT,
-    nome VARCHAR(255),
-    dt_nascimento DATE,
+    id_pessoa BIGINT NOT NULL UNIQUE,
+    nome VARCHAR(255) NOT NULL,
+    dt_nascimento TIMESTAMP NOT NULL,
     genero VARCHAR(255)
 );
 
 CREATE TABLE pessoa_juridica (
-    id_pessoa INT,
-    nome_fantasia VARCHAR(255),
+    id_pessoa BIGINT NOT NULL UNIQUE,
+    nome_fantasia VARCHAR(255) NOT NULL,
     razao_social VARCHAR(255),
-    dt_abertura DATE
+    dt_abertura TIMESTAMP NOT NULL
 );
 
 CREATE TABLE motorista (
-    id_pessoa_fisica INT, --aqui--
-    id_pessoa INT
+    id BIGINT NOT NULL UNIQUE,
+    id_pessoa_fisica BIGINT NOT NULL UNIQUE,
+    id_pessoa BIGINT NOT NULL UNIQUE
 );
 
 CREATE TABLE carro (
-    id INT,
-    placa VARCHAR(255),
-    modelo VARCHAR(255),
-    ano INT,
-    cor VARCHAR(255),
-    km_rodados FLOAT,
+    id BIGINT NOT NULL,
+    placa VARCHAR(255) NOT NULL UNIQUE,
+    modelo VARCHAR(255) NOT NULL,
+    ano INT NOT NULL,
+    cor VARCHAR(255) NOT NULL,
+    km_rodados NUMERIC(18, 2) NOT NULL,
     valor_diaria NUMERIC(8, 4),
-    capacidade_tanque FLOAT,
-    situacao VARCHAR(255)
+    capacidade_tanque NUMERIC(8, 4) NOT NULL,
+    situacao BOOLEAN
 );
 
+COMMENT ON COLUMN carro.situacao IS 'Disponibilidade para locação';
+
 CREATE TABLE locacao (
-    id INT,
-    id_carro INT,
-    id_motorista INT, --aqui
-    id_funcionario INT,
-    dt_locacao DATE,
-    dt_devolucao DATE,
+    id BIGINT NOT NULL UNIQUE,
+    id_carro BIGINT NOT NULL,
+    id_motorista BIGINT NOT NULL,
+    id_funcionario BIGINT NOT NULL,
+    dt_locacao TIMESTAMP,
+    dt_devolucao TIMESTAMP,
     valor_estimado NUMERIC(8, 4),
     valor_total NUMERIC(8, 4)
 );
 
 CREATE TABLE filial (
-    id INT,
-    nome VARCHAR(255),
-    endereco VARCHAR(255),
-    cidade VARCHAR(255),
-    telefone VARCHAR(255),
-    email VARCHAR(255),
-    capacidade INT
+    id BIGINT NOT NULL UNIQUE,
+    nome VARCHAR(255) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    cidade VARCHAR(255) NOT NULL,
+    telefone VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    capacidade INT NOT NULL
 );
 
 CREATE TABLE funcionario (
-    id INT, 
-    id_pessoa_fisica INT, --aqui
-    matricula VARCHAR(255),
-    data_admissao DATE,
-    situacao VARCHAR(255),
-    cargo VARCHAR(255),
-    salario NUMERIC(8, 4)
+    id BIGINT NOT NULL UNIQUE,
+    id_pessoa_fisica BIGINT NOT NULL,
+    matricula VARCHAR(255) NOT NULL,
+    data_admissao TIMESTAMP NOT NULL,
+    situacao BOOLEAN NOT NULL DEFAULT true,
+    cargo VARCHAR(255) NOT NULL,
+    salario NUMERIC(8, 4) NOT NULL
 );
 
+COMMENT ON COLUMN funcionario.situacao IS '1- Ativo na empresa, 0- Despedido';
+
 CREATE TABLE filial_carro (
-    id_filial INT,
-    id_carro INT
+    id_filial BIGINT NOT NULL,
+    id_carro BIGINT NOT NULL
 );
 
 CREATE TABLE filial_documento (
-    id_filial INT,
-    id_documento INT
+    id_filial BIGINT NOT NULL,
+    id_documento BIGINT NOT NULL
 );
 
 CREATE TABLE seguro (
-    id INT,
-    id_filial INT,
-    id_carro INT,
-    valor NUMERIC(8, 4),
-    dt_inicio DATE,
-    dt_fim DATE
+    id BIGINT NOT NULL UNIQUE,
+    descricao TEXT NOT NULL,
+    valor NUMERIC(8, 4) NOT NULL,
+    dt_inicio TIMESTAMP NOT NULL DEFAULT NOW(),
+    dt_fim TIMESTAMP NOT NULL
+);
+
+CREATE TABLE carro_seguro (
+    id_carro BIGINT NOT NULL,
+    id_seguro BIGINT NOT NULL
 );
