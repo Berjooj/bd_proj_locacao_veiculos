@@ -1,2 +1,10 @@
 # bd_proj_locacao_veiculos
-Tema: Locação de veículos. Objetivo: trabalho desenvolvido para a avaliação N2 do curso de Ciência da Computação FAPA - UniRitter
+## Avaliação N2:
+### Disciplina Práticas de Banco de Dados - Ciência da Computação - UniRitter/FAPA
+Integrantes:
+- Bernardo Moreira (@Berjooj);
+- Enzo Petry (@EnzoPetry);
+- Igor Wildner Pereira (@Igorwilp);
+- Israel Andreotti (@israelitas);
+- João Andre Aguiar de Bitencourt (@JoaoAndre78)
+
