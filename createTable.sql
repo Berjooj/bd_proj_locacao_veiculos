@@ -57,6 +57,8 @@ CREATE TABLE locacao (
     id_funcionario BIGINT NOT NULL,
     dt_locacao TIMESTAMP,
     dt_devolucao TIMESTAMP,
+    avaria BOOLEAN DEFAULT FALSE,
+    km_rodados NUMERIC(18, 2),
     valor_estimado NUMERIC(8, 4),
     valor_total NUMERIC(8, 4)
 );
