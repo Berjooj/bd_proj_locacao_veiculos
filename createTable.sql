@@ -1,5 +1,6 @@
 CREATE TABLE documento (
     id BIGINT NOT NULL UNIQUE,
+    id_pessoa BIGINT NOT NULL UNIQUE,
     numero VARCHAR(255) NOT NULL,
     tipo INT NOT NULL,
     dt_emissao TIMESTAMP NOT NULL,
@@ -14,11 +15,6 @@ CREATE TABLE pessoa (
     endereco VARCHAR(255) NOT NULL,
     cidade VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE
-);
-
-CREATE TABLE pessoa_documento (
-    id_pessoa BIGINT NOT NULL,
-    id_documento BIGINT NOT NULL
 );
 
 CREATE TABLE pessoa_fisica (
@@ -36,7 +32,6 @@ CREATE TABLE pessoa_juridica (
 );
 
 CREATE TABLE motorista (
-    id BIGINT NOT NULL UNIQUE,
     id_pessoa_fisica BIGINT NOT NULL UNIQUE,
     id_pessoa BIGINT NOT NULL UNIQUE
 );
@@ -77,7 +72,6 @@ CREATE TABLE filial (
 );
 
 CREATE TABLE funcionario (
-    id BIGINT NOT NULL UNIQUE,
     id_pessoa_fisica BIGINT NOT NULL,
     matricula VARCHAR(255) NOT NULL,
     data_admissao TIMESTAMP NOT NULL,

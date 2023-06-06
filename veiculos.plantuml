@@ -2,6 +2,7 @@
 
 entity documento{
     id <<PK>>
+    id_pessoa <<FK>>
     numero
     tipo
     dt_emissao
@@ -14,11 +15,6 @@ entity pessoa {
     endereco
     cidade
     email
-}
-
-entity pessoa_documento {
-    id_pessoa <<FK>>
-    id_documento <<FK>>
 }
 
 entity pessoa_fisica {
@@ -36,7 +32,6 @@ entity pessoa_juridica {
 }
 
 entity motorista {
-    id <<PK>>
     id_pessoa_fisica <<FK>>
     id_pessoa <<FK>>
 }
@@ -75,7 +70,6 @@ entity filial {
 }
 
 entity funcionario {
-    id <<PK>>
     id_pessoa_fisica <<FK>>
     matricula
     data_admissao
@@ -107,30 +101,28 @@ entity carro_seguro {
     id_seguro <<FK>>
 }
 
-pessoa -- pessoa_documento
-documento -- pessoa_documento
+carro_seguro -- seguro
+carro_seguro -- carro
 
-pessoa -- pessoa_fisica
-pessoa -- pessoa_juridica
+filial_carro -- filial
+filial_carro -- carro
 
-motorista -- pessoa_fisica
+filial_documento -- filial
+filial_documento -- documento
+
+pessoa_fisica -- pessoa
+pessoa_juridica -- pessoa
+
 motorista -- pessoa
+motorista -- pessoa_fisica
 
-pessoa_fisica -- funcionario
+funcionario -- pessoa_fisica
 
-carro -- filial_carro
-filial -- filial_carro
+locacao -- carro
+locacao -- motorista
+locacao -- funcionario
 
-carro -- seguro
-
-carro -- locacao
-motorista -- locacao
-funcionario -- locacao
-
-filial -- funcionario
-
-filial -- filial_documento
-documento -- filial_documento
+documento -- pessoa
 
 
 @enduml
