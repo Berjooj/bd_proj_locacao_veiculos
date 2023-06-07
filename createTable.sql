@@ -1,13 +1,12 @@
 CREATE TABLE documento (
     id BIGINT NOT NULL UNIQUE,
-    id_pessoa BIGINT NOT NULL UNIQUE,
+    id_pessoa BIGINT NOT NULL,
     numero VARCHAR(255) NOT NULL,
-    tipo INT NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
     dt_emissao TIMESTAMP NOT NULL,
     dt_validade TIMESTAMP
 );
-
-COMMENT ON COLUMN documento.tipo IS '1- RG, 2- CNH, 3- CPF, 4- CNPJ';
+COMMENT ON COLUMN documento.tipo IS 'RG, CNH, CPF, CNPJ; Alvará; PPCI';
 
 CREATE TABLE pessoa (
     id BIGINT NOT NULL UNIQUE,
