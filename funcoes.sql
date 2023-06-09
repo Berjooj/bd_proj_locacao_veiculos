@@ -1,4 +1,6 @@
--- 1)
+-- 1) Função para cadastrar uma filial, caso não seja informado um CNPJ, retornar um erro
+-- Caso algum documento esteja vencido, retornar um erro
+-- Por fim, retornar o ID da filial cadastrada
 INSERT INTO pessoa (id, telefone, endereco, cidade, email) values (10, '99999-9999', 'Rua AAA, Num 201', 'Porto Alegre', 'empresa.super.nova.tec@email.com.br');
 INSERT INTO pessoa_juridica (id_pessoa, nome_fantasia, razao_social, dt_abertura) values (10, 'Super Nova Tec', 'Super Nova Tecnologia LTDA', '2010-01-01');
 INSERT INTO documento (id, id_pessoa, tipo, numero, dt_emissao, dt_validade) values (20, 10, 'CNPJ', '12345678901234', '2010-01-01', null);
@@ -51,6 +53,36 @@ LANGUAGE plpgsql;
 SELECT * FROM f_cadastra_filial('Filial 1 - Correta', 'Rua ABC, Num 10', 'Porto Alegre', '99999-9999', 'email@filia.1.com', 50, ARRAY[20, 21]);
 
 SELECT f_cadastra_filial('Filial 2 - Erro', 'Rua ABC, Num 10', 'Porto Alegre', '99999-9999', 'email@filia.2.com', 50, ARRAY[22, 23]);
+
+-- 2) Função que valida se o carro está disponível para aluguel, caso não esteja, retorna uma mensagem de erro
+-- caso esteja disponívelm calcula o valor estimado da locação e insere na tabela locacao
+CREATE OR REPLACE FUNCTION alugar(id_carro BIGINT, id_motorista BIGINT, id_funcionario BIGINT, dt_locacao TIMESTAMP, dt_devolucao TIMESTAMP) RETURNS BIGINT AS
+$$
+DECLARE
+	carro record;
+	dias int;
+
+BEGIN
+
+	SELECT * FROM carro INTO carro WHERE id = id_carro AND situacao = false;
+
+	IF carro IS NULL THEN
+ 		RAISE NOTICE 'O carro está indisponível';
+	END IF;
+
+    dias := EXTRACT(DAY FROM dt_locacao - dt_devolucao);
+
+    INSERT INTO locacao
+        (id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao , valor_estimado) VALUES
+        (id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao, (dias * carro.valor_diaria));
+
+END;
+$$
+LANGUAGE plpgsql;
+
+SELECT alugar(id_carro BIGINT, id_motorista BIGINT, id_funcionario BIGINT, dt_locacao TIMESTAMP, dt_devolucao TIMESTAMP);
+
+
 
 
 

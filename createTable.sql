@@ -78,7 +78,8 @@ CREATE TABLE funcionario (
     data_admissao TIMESTAMP NOT NULL,
     situacao BOOLEAN NOT NULL DEFAULT true,
     cargo VARCHAR(255) NOT NULL,
-    salario NUMERIC(8, 4) NOT NULL
+    salario NUMERIC(8, 4) NOT NULL,
+    id_filial BIGINT NOT NULL
 );
 
 COMMENT ON COLUMN funcionario.situacao IS '1- Ativo na empresa, 0- Despedido';

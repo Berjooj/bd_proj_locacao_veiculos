@@ -34,6 +34,7 @@ ALTER TABLE funcionario ADD FOREIGN KEY (id_pessoa_fisica) REFERENCES pessoa_fis
 ALTER TABLE locacao ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
 ALTER TABLE locacao ADD FOREIGN KEY (id_motorista) REFERENCES motorista(id_pessoa_fisica) ON DELETE CASCADE;
 ALTER TABLE locacao ADD FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_pessoa_fisica) ON DELETE CASCADE;
+ALTER TABLE funcionario ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
 
 ALTER TABLE documento ADD FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE;
 

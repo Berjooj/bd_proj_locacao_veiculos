@@ -76,6 +76,7 @@ entity funcionario {
     situacao
     cargo
     salario
+    id_filial <<FK>>
 }
 
 entity filial_carro {
@@ -101,28 +102,28 @@ entity carro_seguro {
     id_seguro <<FK>>
 }
 
-carro_seguro -- seguro
-carro_seguro -- carro
+carro_seguro "1..1" -- "1..1" seguro
+carro_seguro "1..n" -- "n..1" carro
 
-filial_carro -- filial
-filial_carro -- carro
+filial_carro "1..n" -- "n..0" filial
+filial_carro "n..1" -- "0..n" carro
 
-filial_documento -- filial
-filial_documento -- documento
+filial_documento "n..1" -- "1..n" filial
+filial_documento "1..n" -- "n..1" documento
 
-pessoa_fisica -- pessoa
-pessoa_juridica -- pessoa
+pessoa_fisica "1..1" -- "0..1" pessoa
+pessoa_juridica "1..1" -- "0..1" pessoa
 
-motorista -- pessoa
-motorista -- pessoa_fisica
+motorista "1..1" -- "n..1" pessoa
+motorista "1..1" -- "n..1" pessoa_fisica
 
-funcionario -- pessoa_fisica
+funcionario "1..1" -- "n..1" pessoa_fisica
+funcionario "1..1" -- "n..1" filial
 
-locacao -- carro
-locacao -- motorista
-locacao -- funcionario
+locacao "1..1" -- "n..1" carro
+locacao "1..1" -- "n..1" motorista
+locacao "1..1" -- "n..1" funcionario
 
-documento -- pessoa
-
+documento "1..1" -- "1..1" pessoa
 
 @enduml
