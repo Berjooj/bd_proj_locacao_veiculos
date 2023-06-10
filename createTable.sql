@@ -31,8 +31,9 @@ CREATE TABLE pessoa_juridica (
 );
 
 CREATE TABLE motorista (
-    id_pessoa_fisica BIGINT NOT NULL UNIQUE,
-    id_pessoa BIGINT NOT NULL UNIQUE
+    id BIGINT NOT NULL UNIQUE,
+    id_pessoa_fisica BIGINT NOT NULL,
+    id_pessoa BIGINT NOT NULL
 );
 
 CREATE TABLE carro (
@@ -41,7 +42,7 @@ CREATE TABLE carro (
     modelo VARCHAR(255) NOT NULL,
     ano INT NOT NULL,
     cor VARCHAR(255) NOT NULL,
-    km_rodados NUMERIC(18, 2) NOT NULL,
+    km_rodados NUMERIC(18, 2) DEFAULT NOT NULL,
     valor_diaria NUMERIC(8, 4),
     capacidade_tanque NUMERIC(8, 4) NOT NULL,
     situacao BOOLEAN
@@ -57,7 +58,7 @@ CREATE TABLE locacao (
     dt_locacao TIMESTAMP,
     dt_devolucao TIMESTAMP,
     avaria BOOLEAN DEFAULT FALSE,
-    km_rodados NUMERIC(18, 2),
+    km_rodados NUMERIC(18, 2) DEFAULT 0,
     valor_estimado NUMERIC(8, 4),
     valor_total NUMERIC(8, 4)
 );

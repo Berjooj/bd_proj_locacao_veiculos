@@ -1,6 +1,6 @@
 -- EXECUTA OS ALTER TABLES PARA FKs e PKs
 ALTER TABLE seguro ADD PRIMARY KEY (id);
-ALTER TABLE motorista ADD PRIMARY KEY (id_pessoa_fisica);
+ALTER TABLE motorista ADD PRIMARY KEY (id);
 ALTER TABLE documento ADD PRIMARY KEY(id);
 ALTER TABLE pessoa ADD PRIMARY KEY(id);
 ALTER TABLE pessoa_fisica ADD PRIMARY KEY(id_pessoa);
@@ -32,7 +32,7 @@ ALTER TABLE motorista ADD FOREIGN KEY (id_pessoa_fisica) REFERENCES pessoa_fisic
 ALTER TABLE funcionario ADD FOREIGN KEY (id_pessoa_fisica) REFERENCES pessoa_fisica(id_pessoa) ON DELETE CASCADE;
 
 ALTER TABLE locacao ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
-ALTER TABLE locacao ADD FOREIGN KEY (id_motorista) REFERENCES motorista(id_pessoa_fisica) ON DELETE CASCADE;
+ALTER TABLE locacao ADD FOREIGN KEY (id_motorista) REFERENCES motorista(id) ON DELETE CASCADE;
 ALTER TABLE locacao ADD FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_pessoa_fisica) ON DELETE CASCADE;
 ALTER TABLE funcionario ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
 
@@ -80,3 +80,10 @@ START 1
 CACHE 1;
 
 ALTER TABLE seguro ALTER COLUMN id SET DEFAULT NEXTVAL('seguro_id_seq');
+
+CREATE SEQUENCE motorista_id_seq
+INCREMENT 1
+START 1
+CACHE 1;
+
+ALTER TABLE motorista ALTER COLUMN id SET DEFAULT NEXTVAL('motorista_id_seq');
