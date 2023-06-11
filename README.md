@@ -1,6 +1,13 @@
 # bd_proj_locacao_veiculos
 ## Avaliação N2:
 ### Disciplina Práticas de Banco de Dados - Ciência da Computação - UniRitter/FAPA
+
+Conexão com compass:
+mongodb+srv://locacao:<password>@cluster0.txq5lmf.mongodb.net/
+
+Conexão com shell:
+mongosh "mongodb+srv://cluster0.txq5lmf.mongodb.net" --apiVersion 1 --username locacao
+
 Integrantes:
 - Bernardo Moreira (@Berjooj);
 - Enzo Petry (@EnzoPetry);
