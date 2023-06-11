@@ -92,6 +92,12 @@ db.documento.insertOne({
     dt_validade: ISODate('2022-06-05')
 });
 
+// Sucesso, documento 20 é um CNPJ e o 21 está dentro do prazo de validade
+cadastra_filial('Filial 1 - Correta', 'Rua ABC, Num 10', 'Porto Alegre', '99999-9999', 'email@filia.1.com', 50, ARRAY[20, 21]);
+
+// Erro, documento 22 é um CNPJ, mas o 23 está vencido
+cadastra_filial('Filial 2 - Erro', 'Rua ABC, Num 10', 'Porto Alegre', '99999-9999', 'email@filia.2.com', 50, ARRAY[22, 23]);
+
 // SEGUNDA PROCEDURE - ALUGAR CARRO
 
 function alugar(id_carro, id_motorista, id_funcionario, dt_locacao, dt_devolucao) { var carro = db.carro.findOne({ id: id_carro, situacao: false }); if (!carro) { throw new Error('O carro está indisponível'); } var dias = Math.ceil((dt_devolucao - dt_locacao) / (1000 * 60 * 60 * 24)); var locacao = { id_carro: id_carro, id_motorista: id_motorista, id_funcionario: id_funcionario, dt_locacao: dt_locacao, dt_devolucao: dt_devolucao, valor_estimado: dias * carro.valor_diaria }; var result = db.locacao.insertOne(locacao); var id_locacao = result.insertedId; db.carro.updateOne({ id: id_carro }, { $set: { situacao: true } }); return id_locacao; }
@@ -174,6 +180,14 @@ db.carro.insertOne({
     situacao: false
 });
 
+// Sucesso
+//(id_carro, id_motorista, id_funcionario, dt_locacao, dt_devolucao)
+alugar(6, 15, 16, new Date('2023-06-09'), new Date('2023-07-09'))
+db.locacao.find()
+
+// Erro, pois o carro 6 já está alugado
+ alugar(6, 15, 16, new Date('2023-06-09'), new Date ('2023-07-09'))
+
 // TERCEIRA PROCEDURE - VERIFICAÇÃO DE CNH
 
 function verificarCNHVencida(documento) { if (documento.tipo === 'CNH' && documento.dt_validade < new Date()) { throw new Error('A CNH está vencida para o documento com ID ' + documento._id); } return documento; }
@@ -216,6 +230,13 @@ db.documento.insertOne({
     dt_emissao: ISODate('2015-02-21'),
     dt_validade: ISODate('2025-02-21')
 });
+
+// Exemplo de uso
+var novoDocumento = { _id: 1, tipo: 'CNH', dt_validade: new Date('2022-01-01') };
+
+try { novoDocumento = verificarCNHVencida(novoDocumento); printjson(novoDocumento); } catch (error) { print(error.message); }
+
+
 
 // QUARTA PROCEDURE - CÁLCULO DE ACRÉSCIMOS
 function calcular_acrescimos(id_carro_devolucao, tanque_atual, preco_gasolina, tipo_avaria) { var preco_total; var preco_diaria; var preco_seguro; var capacidade_tanque; var locacao; var devolucao; var alugado; alugado = db.carro.findOne({ id: id_carro_devolucao }).situacao; if (alugado) { capacidade_tanque = db.carro.findOne({ id: id_carro_devolucao }).capacidade_tanque; var locacaoData = db.locacao.find({ id_carro: id_carro_devolucao }).sort({ id: -1 }).limit(1); locacaoData.forEach(function (loc) { preco_diaria = loc.valor_estimado; locacao = loc.dt_locacao; devolucao = loc.dt_devolucao; }); preco_total = preco_diaria + (Math.abs(capacidade_tanque - tanque_atual) * preco_gasolina); if (tipo_avaria.length > 0) { var seguroData = db.carro.aggregate([ { $match: { id: id_carro_devolucao } }, { $lookup: { from: "carro_seguro", localField: "id", foreignField: "id_carro", as: "seguros" } }, { $unwind: "$seguros" }, { $lookup: { from: "seguro", localField: "seguros.id_seguro", foreignField: "id", as: "seguro" } }, { $unwind: "$seguro" }, { $match: { "seguro.descricao": { $in: tipo_avaria } } }, { $group: { _id: null, valor: { $sum: "$seguro.valor" } } } ]).toArray(); if (seguroData.length > 0) { preco_seguro = seguroData[0].valor; preco_total += preco_seguro; } db.locacao.updateOne({ id: locacaoData[0].id }, { $set: { avaria: true } }); } else { db.locacao.updateOne({ id: locacaoData[0].id }, { $set: { avaria: false } }); } db.locacao.updateOne({ id: locacaoData[0].id }, { $set: { valor_total: preco_total } }); print("Custos totais de utilizacao do Carro " + id_carro_devolucao + " é " + preco_total); return preco_total; } else { throw new Error("Carro não está alugado para calcular acrescimos"); } }
@@ -264,3 +285,9 @@ db.carro_seguro.insertMany([
     id_seguro: 3
 }
 ]);
+// Devolve um carro danificado e com acidente
+//(id_carro_devolucao, tanque_atual, preco_gasolina, kilometragem_utilizada, tipo_avaria)
+devolver_carro(6, 15, 5.34, 5000, ARRAY['DANO', 'ACIDENTE']);
+db.locacao.find();
+
+
