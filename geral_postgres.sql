@@ -316,7 +316,7 @@ $$ LANGUAGE plpgsql;
 
 -- Gatilho "documento"
 CREATE TRIGGER cnh_vencida_trigger
-AFTER INSERT OR UPDATE ON documento
+BEFORE INSERT OR UPDATE ON documento
 FOR EACH ROW
 EXECUTE FUNCTION verificar_cnh_vencida();
 

@@ -103,7 +103,7 @@ entity carro_seguro {
     id_seguro <<FK>>
 }
 
-carro_seguro "1..1" -- "1..1" seguro
+carro_seguro "1..n" -- "n..1" seguro
 carro_seguro "1..n" -- "n..1" carro
 
 filial_carro "1..n" -- "n..0" filial
@@ -125,6 +125,6 @@ locacao "1..1" -- "n..1" carro
 locacao "1..1" -- "n..1" motorista
 locacao "1..1" -- "n..1" funcionario
 
-documento "1..1" -- "1..1" pessoa
+documento "n..1" -- "1..n" pessoa
 
 @enduml
