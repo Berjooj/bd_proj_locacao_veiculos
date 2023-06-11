@@ -2,40 +2,40 @@
 -- Caso algum documento esteja vencido, retornar um erro
 -- Por fim, retornar o ID da filial cadastrada
 CREATE OR REPLACE FUNCTION f_cadastra_filial (
-    nome VARCHAR(255),
-    endereco VARCHAR(255),
-    cidade VARCHAR(255),
-    telefone VARCHAR(255),
-    email VARCHAR(255),
-    capacidade INT,
-    id_documentos BIGINT[]
-    ) RETURNS BIGINT AS
+	nome VARCHAR(255),
+	endereco VARCHAR(255),
+	cidade VARCHAR(255),
+	telefone VARCHAR(255),
+	email VARCHAR(255),
+	capacidade INT,
+	id_documentos BIGINT[]
+	) RETURNS BIGINT AS
 $$
 	DECLARE
-        documento RECORD;
-        possui_cnpj BOOLEAN;
-        id_filial BIGINT;
+		documento RECORD;
+		possui_cnpj BOOLEAN;
+		id_filial BIGINT;
 	BEGIN
 
-        possui_cnpj := FALSE;
+		possui_cnpj := FALSE;
 
-        FOR documento IN SELECT d.* FROM documento d WHERE d.id = ANY(id_documentos) LOOP
-            IF documento.tipo = 'CNPJ' THEN
-                possui_cnpj := TRUE;
-            END IF;
+		FOR documento IN SELECT d.* FROM documento d WHERE d.id = ANY(id_documentos) LOOP
+			IF documento.tipo = 'CNPJ' THEN
+				possui_cnpj := TRUE;
+			END IF;
 
-            IF documento.dt_validade IS NOT NULL AND documento.dt_validade < now() THEN
-                RAISE EXCEPTION 'Documento % está vencido', documento.numero;
-            END IF;
-        END LOOP;
+			IF documento.dt_validade IS NOT NULL AND documento.dt_validade < now() THEN
+				RAISE EXCEPTION 'Documento % está vencido', documento.numero;
+			END IF;
+		END LOOP;
 
-        IF possui_cnpj = FALSE THEN
-            RAISE EXCEPTION 'Para cadastrar uma filial é necessário informar um CNPJ';
-        END IF;
+		IF possui_cnpj = FALSE THEN
+			RAISE EXCEPTION 'Para cadastrar uma filial é necessário informar um CNPJ';
+		END IF;
 
-        INSERT INTO filial (nome, endereco, cidade, telefone, email, capacidade) VALUES (nome, endereco, cidade, telefone, email, capacidade) RETURNING id INTO id_filial;
+		INSERT INTO filial (nome, endereco, cidade, telefone, email, capacidade) VALUES (nome, endereco, cidade, telefone, email, capacidade) RETURNING id INTO id_filial;
 
-        RETURN id_filial;
+		RETURN id_filial;
 	END;
 $$
 LANGUAGE plpgsql;
@@ -72,15 +72,15 @@ BEGIN
  		RAISE EXCEPTION 'O carro está indisponível';
 	END IF;
 
-    dias := EXTRACT(DAY FROM dt_devolucao - dt_locacao);
+	dias := EXTRACT(DAY FROM dt_devolucao - dt_locacao);
 
-    INSERT INTO locacao
-        (id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao , valor_estimado) VALUES
-        (id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao, (dias * carro.valor_diaria)) RETURNING id INTO id_locacao;
+	INSERT INTO locacao
+		(id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao , valor_estimado) VALUES
+		(id_carro, id_motorista, id_funcionario, dt_locacao , dt_devolucao, (dias * carro.valor_diaria)) RETURNING id INTO id_locacao;
 
-    UPDATE carro SET situacao = TRUE WHERE id = id_carro;
+	UPDATE carro SET situacao = TRUE WHERE id = id_carro;
 
-    RETURN id_locacao;
+	RETURN id_locacao;
 END;
 $$
 LANGUAGE plpgsql;
@@ -106,11 +106,11 @@ SELECT alugar(6, 15, 16, '2023-06-09', '2023-07-09');
 CREATE OR REPLACE FUNCTION verificar_cnh_vencida()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.tipo = 'CNH' AND NEW.dt_validade < now() THEN
-       RAISE EXCEPTION 'A CNH está vencida para o documento com ID %', NEW.id;
-    END IF;
+	IF NEW.tipo = 'CNH' AND NEW.dt_validade < now() THEN
+	   RAISE EXCEPTION 'A CNH está vencida para o documento com ID %', NEW.id;
+	END IF;
 
-    RETURN NEW;
+	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -177,20 +177,20 @@ BEGIN
 			SET avaria = TRUE
 			WHERE id =
 			(
-                SELECT l.id
-                FROM locacao l
-                WHERE l.id_carro = id_carro_devolucao
-                ORDER BY l.id DESC LIMIT 1
+				SELECT l.id
+				FROM locacao l
+				WHERE l.id_carro = id_carro_devolucao
+				ORDER BY l.id DESC LIMIT 1
 			);
 		ELSE
 			UPDATE locacao
 			SET avaria = FALSE
 			WHERE id =
 			(
-                SELECT l.id
-                FROM locacao l
-                WHERE l.id_carro = id_carro_devolucao
-                ORDER BY l.id DESC LIMIT 1
+				SELECT l.id
+				FROM locacao l
+				WHERE l.id_carro = id_carro_devolucao
+				ORDER BY l.id DESC LIMIT 1
 			);
 		END if;
 
@@ -198,10 +198,10 @@ BEGIN
 	SET valor_total = preco_total
 	WHERE id =
 	(
-        SELECT l.id
-        FROM locacao l
-        WHERE l.id_carro = id_carro_devolucao
-        ORDER BY l.id DESC LIMIT 1
+		SELECT l.id
+		FROM locacao l
+		WHERE l.id_carro = id_carro_devolucao
+		ORDER BY l.id DESC LIMIT 1
 	);
 	RAISE NOTICE 'Custos totais de utilizacao do Carro % é %',id_carro_devolucao,preco_total;
 	RETURN preco_total;
@@ -231,10 +231,10 @@ BEGIN
 	SET km_rodados = kilometragem_utilizada
 	WHERE id =
 	(
-        SELECT l.id
-        FROM locacao l
-        WHERE l.id_carro = id_carro_devolucao
-        ORDER BY l.id DESC LIMIT 1
+		SELECT l.id
+		FROM locacao l
+		WHERE l.id_carro = id_carro_devolucao
+		ORDER BY l.id DESC LIMIT 1
 	);
 
 	UPDATE carro
