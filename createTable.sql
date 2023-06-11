@@ -42,7 +42,7 @@ CREATE TABLE carro (
     modelo VARCHAR(255) NOT NULL,
     ano INT NOT NULL,
     cor VARCHAR(255) NOT NULL,
-    km_rodados NUMERIC(18, 2) DEFAULT NOT NULL,
+    km_rodados NUMERIC(18, 2) DEFAULT 0 NOT NULL,
     valor_diaria NUMERIC(8, 4),
     capacidade_tanque NUMERIC(8, 4) NOT NULL,
     situacao BOOLEAN
