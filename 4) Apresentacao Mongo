@@ -1,5 +1,4 @@
 // CRIA AS COLEÇÕES
-
 db.createCollection("documento");
 db.createCollection("pessoa");
 db.createCollection("pessoa_fisica");
@@ -8,7 +7,6 @@ db.createCollection("motorista");
 db.createCollection("carro");
 db.createCollection("filial");
 db.createCollection("funcionario");
-db.createCollection("filial_carro");
 db.createCollection("filial_documento");
 db.createCollection("seguro");
 db.createCollection("carro_seguro");
@@ -41,7 +39,7 @@ db.pessoa_fisica.insertMany([{ id_pessoa: 15, nome: 'João Pedro', dt_nascimento
 db.filial.insertOne({ _id: 5, nome: 'Filial 3', endereco: 'Rua EEE, Num 555', cidade: 'Canoas', telefone: '97777-7777', email: 'filial3@email.com', capacidade: 50 });
 db.funcionario.insertOne({ id_pessoa_fisica: 16, matricula: '00002', data_admissao: ISODate('2020-02-13'), situacao: true, cargo: 'Vendedor', salario: 3000, id_filial: 5 });
 db.motorista.insertOne({ _id: 15, id_pessoa_fisica: 15, id_pessoa: 15 });
-db.carro.insertOne({ _id: 6, placa: 'IBC123', modelo: 'UNO', ano: 2000, cor: 'Azul', km_rodados: 1000, valor_diaria: 150, capacidade_tanque: 100, situacao: false });
+db.carro.insertOne({ _id: 6, placa: 'IBC123', modelo: 'UNO', ano: 2000, cor: 'Azul', km_rodados: 1000, valor_diaria: 150, capacidade_tanque: 100, situacao: false, id_filial: 5 });
 
 // Sucesso
 //(id_carro, id_motorista, id_funcionario, dt_locacao, dt_devolucao)

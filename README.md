@@ -4,12 +4,14 @@
 
 Conexão com compass:
 ```Shell
-mongodb+srv://locacao:<password>@cluster0.txq5lmf.mongodb.net/
+mongodb+srv://locacao:123456*A@cluster0.txq5lmf.mongodb.net/
 ```
 
 Conexão com shell:
 ```Shell
-mongosh "mongodb+srv://cluster0.txq5lmf.mongodb.net" --apiVersion 1 --username locacao
+$ mongosh "mongodb+srv://cluster0.txq5lmf.mongodb.net" --apiVersion 1 --username locacao
+$ psw: 123456*A
+$ use locadora
 ```
 
 Integrantes:
