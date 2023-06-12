@@ -8,7 +8,6 @@ db.createCollection("carro");
 db.createCollection("locacao");
 db.createCollection("filial");
 db.createCollection("funcionario");
-db.createCollection("filial_carro");
 db.createCollection("filial_documento");
 db.createCollection("seguro");
 db.createCollection("carro_seguro");
@@ -413,7 +412,8 @@ db.carro.insertOne({
     km_rodados: 1000,
     valor_diaria: 150,
     capacidade_tanque: 100,
-    situacao: false
+    situacao: false,
+    id_filial: 5
 });
 
 // 3 PROCEDURE
