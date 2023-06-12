@@ -11,17 +11,15 @@ ALTER TABLE locacao ADD PRIMARY KEY (id);
 ALTER TABLE carro ADD PRIMARY KEY (id);
 
 ALTER TABLE carro_seguro ADD PRIMARY KEY (id_seguro, id_carro);
-ALTER TABLE filial_carro ADD PRIMARY KEY (id_filial, id_carro);
 ALTER TABLE filial_documento ADD PRIMARY KEY (id_filial, id_documento);
 
 ALTER TABLE carro_seguro ADD FOREIGN KEY (id_seguro) REFERENCES seguro(id) ON DELETE CASCADE;
 ALTER TABLE carro_seguro ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
 
-ALTER TABLE filial_carro ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
-ALTER TABLE filial_carro ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
+ALTER TABLE carro ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
 
 ALTER TABLE filial_documento ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
-ALTER TABLE filial_documento ADD FOREIGN KEY (id_documento)	REFERENCES documento(id) ON DELETE CASCADE;
+ALTER TABLE filial_documento ADD FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE CASCADE;
 
 ALTER TABLE pessoa_fisica ADD FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE;
 ALTER TABLE pessoa_juridica ADD FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE;

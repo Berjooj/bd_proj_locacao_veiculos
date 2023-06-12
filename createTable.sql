@@ -6,6 +6,7 @@ CREATE TABLE documento (
     dt_emissao TIMESTAMP NOT NULL,
     dt_validade TIMESTAMP
 );
+
 COMMENT ON COLUMN documento.tipo IS 'RG, CNH, CPF, CNPJ; Alvará; PPCI';
 
 CREATE TABLE pessoa (
@@ -45,7 +46,8 @@ CREATE TABLE carro (
     km_rodados NUMERIC(18, 2) DEFAULT 0 NOT NULL,
     valor_diaria NUMERIC(8, 4),
     capacidade_tanque NUMERIC(8, 4) NOT NULL,
-    situacao BOOLEAN
+    situacao BOOLEAN,
+    id_filial BIGINT NOT NULL
 );
 
 COMMENT ON COLUMN carro.situacao IS 'Disponibilidade para locação';
@@ -84,11 +86,6 @@ CREATE TABLE funcionario (
 );
 
 COMMENT ON COLUMN funcionario.situacao IS '1- Ativo na empresa, 0- Despedido';
-
-CREATE TABLE filial_carro (
-    id_filial BIGINT NOT NULL,
-    id_carro BIGINT NOT NULL
-);
 
 CREATE TABLE filial_documento (
     id_filial BIGINT NOT NULL,

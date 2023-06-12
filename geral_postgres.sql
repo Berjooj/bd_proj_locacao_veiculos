@@ -6,6 +6,7 @@ CREATE TABLE documento (
     dt_emissao TIMESTAMP NOT NULL,
     dt_validade TIMESTAMP
 );
+
 COMMENT ON COLUMN documento.tipo IS 'RG, CNH, CPF, CNPJ; Alvará; PPCI';
 
 CREATE TABLE pessoa (
@@ -42,10 +43,11 @@ CREATE TABLE carro (
     modelo VARCHAR(255) NOT NULL,
     ano INT NOT NULL,
     cor VARCHAR(255) NOT NULL,
-    km_rodados NUMERIC(18, 2) DEFAULT NOT NULL,
+    km_rodados NUMERIC(18, 2) DEFAULT 0 NOT NULL,
     valor_diaria NUMERIC(8, 4),
     capacidade_tanque NUMERIC(8, 4) NOT NULL,
-    situacao BOOLEAN
+    situacao BOOLEAN,
+    id_filial BIGINT NOT NULL
 );
 
 COMMENT ON COLUMN carro.situacao IS 'Disponibilidade para locação';
@@ -85,11 +87,6 @@ CREATE TABLE funcionario (
 
 COMMENT ON COLUMN funcionario.situacao IS '1- Ativo na empresa, 0- Despedido';
 
-CREATE TABLE filial_carro (
-    id_filial BIGINT NOT NULL,
-    id_carro BIGINT NOT NULL
-);
-
 CREATE TABLE filial_documento (
     id_filial BIGINT NOT NULL,
     id_documento BIGINT NOT NULL
@@ -121,17 +118,15 @@ ALTER TABLE locacao ADD PRIMARY KEY (id);
 ALTER TABLE carro ADD PRIMARY KEY (id);
 
 ALTER TABLE carro_seguro ADD PRIMARY KEY (id_seguro, id_carro);
-ALTER TABLE filial_carro ADD PRIMARY KEY (id_filial, id_carro);
 ALTER TABLE filial_documento ADD PRIMARY KEY (id_filial, id_documento);
 
 ALTER TABLE carro_seguro ADD FOREIGN KEY (id_seguro) REFERENCES seguro(id) ON DELETE CASCADE;
 ALTER TABLE carro_seguro ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
 
-ALTER TABLE filial_carro ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
-ALTER TABLE filial_carro ADD FOREIGN KEY (id_carro) REFERENCES carro(id) ON DELETE CASCADE;
+ALTER TABLE carro ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
 
 ALTER TABLE filial_documento ADD FOREIGN KEY (id_filial) REFERENCES filial(id) ON DELETE CASCADE;
-ALTER TABLE filial_documento ADD FOREIGN KEY (id_documento)	REFERENCES documento(id) ON DELETE CASCADE;
+ALTER TABLE filial_documento ADD FOREIGN KEY (id_documento) REFERENCES documento(id) ON DELETE CASCADE;
 
 ALTER TABLE pessoa_fisica ADD FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE;
 ALTER TABLE pessoa_juridica ADD FOREIGN KEY (id_pessoa) REFERENCES pessoa(id) ON DELETE CASCADE;
@@ -292,7 +287,7 @@ INSERT INTO pessoa_fisica (id_pessoa, nome, dt_nascimento, genero) values (16, '
 INSERT INTO filial (id, nome, endereco, cidade, telefone, email, capacidade) values (5, 'Filial 3', 'Rua EEE, Num 555', 'Canoas', '97777-7777', 'filial3@email.com', 50);
 INSERT INTO funcionario (id_pessoa_fisica, matricula, data_admissao, situacao, cargo, salario, id_filial) values (16, '00002', '2020-02-13', true, 'Vendedor', 3000, 5);
 INSERT INTO motorista (id, id_pessoa_fisica, id_pessoa) values (15, 15, 15);
-INSERT INTO carro (id, placa, modelo, ano, cor, km_rodados, valor_diaria, capacidade_tanque, situacao) values (6, 'IBC123', 'UNO', 2000, 'Azul', 1000, 150, 100, false);
+INSERT INTO carro (id, placa, modelo, ano, cor, km_rodados, valor_diaria, capacidade_tanque, situacao,id_filial) values (6, 'IBC123', 'UNO', 2000, 'Azul', 1000, 150, 100, FALSE,5);
 
 -- Sucesso
 -- (id_carro, id_motorista, id_funcionario, dt_locacao, dt_devolucao)
@@ -507,6 +502,7 @@ entity motorista {
 
 entity carro {
     id <<PK>>
+    id_filial <<FK>>
     placa
     modelo
     ano
@@ -548,11 +544,6 @@ entity funcionario {
     id_filial <<FK>>
 }
 
-entity filial_carro {
-    id_filial <<FK>>
-    id_carro <<FK>>
-}
-
 entity filial_documento {
     id_filial <<FK>>
     id_documento <<FK>>
@@ -574,8 +565,7 @@ entity carro_seguro {
 carro_seguro "1..1" -- "1..1" seguro
 carro_seguro "1..n" -- "n..1" carro
 
-filial_carro "1..n" -- "n..0" filial
-filial_carro "n..1" -- "0..n" carro
+carro "1..1" -- "0..1" filial
 
 filial_documento "n..1" -- "1..n" filial
 filial_documento "1..n" -- "n..1" documento
