@@ -92,7 +92,7 @@ INSERT INTO pessoa_fisica (id_pessoa, nome, dt_nascimento, genero) values (16, '
 INSERT INTO filial (id, nome, endereco, cidade, telefone, email, capacidade) values (5, 'Filial 3', 'Rua EEE, Num 555', 'Canoas', '97777-7777', 'filial3@email.com', 50);
 INSERT INTO funcionario (id_pessoa_fisica, matricula, data_admissao, situacao, cargo, salario, id_filial) values (16, '00002', '2020-02-13', true, 'Vendedor', 3000, 5);
 INSERT INTO motorista (id, id_pessoa_fisica, id_pessoa) values (15, 15, 15);
-INSERT INTO carro (id, placa, modelo, ano, cor, km_rodados, valor_diaria, capacidade_tanque, situacao, id_filial) values (6, 'IBC123', 'UNO', 2000, 'Azul', 1000, 150, 100, false, 1);
+INSERT INTO carro (id, placa, modelo, ano, cor, km_rodados, valor_diaria, capacidade_tanque, situacao, id_filial) values (6, 'IBC123', 'UNO', 2000, 'Azul', 1000, 150, 100, false, 5);
 
 -- Sucesso
 -- (id_carro, id_motorista, id_funcionario, dt_locacao, dt_devolucao)
