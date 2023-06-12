@@ -107,7 +107,7 @@ carro_seguro "1..n" -- "n..1" seguro
 carro_seguro "1..n" -- "n..1" carro
 
 filial_carro "1..n" -- "n..0" filial
-filial_carro "n..1" -- "0..n" carro
+filial_carro "n..1" -- "0..1" carro
 
 filial_documento "n..1" -- "1..n" filial
 filial_documento "1..n" -- "n..1" documento
